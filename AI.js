@@ -1,3 +1,4 @@
+//Fri Feb, 3 2017 6:40 PM
 'use strict'
 var login = require('facebook-chat-api');
 var fs = require('fs');
@@ -5,8 +6,6 @@ var request = require('request');
 var lowerCase = require('lower-case');
 var uriencode = require('urlencode');
 
-
-var path = require('./\[DATA\]/const.js').path;
 var api = require('./\[DATA\]/const.js').api
 var func = require('./\[DATA\]/commonFunc.js');
 
@@ -66,7 +65,7 @@ var javCode = Array('MIAD-530', 'MIDD-944', 'LADY-077', 'SW-186', 'STAR444', 'T2
  'SHKD-489', 'SHKD-518', 'SHKD-546', 'SHKD-586', 'SHKD-614', 'SHKD-619', 'SHL-035', 'SILK-001', 'SILK-052', 'SILK-009', 'SIS-012', 'SIS-020', 'SIS-021', 'SIS-022', 'SIS-023', 'SIS-028', 'SIS-032', 'SIS-007', 
  'SMA-661', 'SMA-723', 'SMS-004', 'SND-003', 'SNIS-110', 'SNIS-268', 'SNIS-313', 'SNIS-070', 'SNIS-070', 'SOE-146', 'SOE-028', 'SOE-339', 'SOE-586', 'SOE-910', 'SOE-936', 'SOE-940', 'SOE-941', 'SOE-990', 'SOE-992',
  'SOE-992', 'SON-501', 'SOR-018', 'SQTE-082', 'SQTE-090', 'SQTE-092', 'SRS-015', 'SS-025', 'SS-005', 'SSD-111', 'SSD-086', 'STAR-3115', 'STAR-316','STAR-325', 'STAR-395', 'STAR-476', 'STAR-545', 'STAR-551',
-'STAR-553');
+'STAR-553','KRND-020','RHTS-015', 'RHTS-040','RTP-020');
 
 
 login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function callback(err, api) {
@@ -218,24 +217,65 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 						event.body = UndefinedHandle(event.body);
 					func.log(event.senderID+': '+event.body);
 
+					///////////////////////// COMMAND EXECUTE ///////////////////////////
+
+					//#### Weather 
 					if(event.body.indexOf("thoi tiet") != -1 || event.body.indexOf("thời tiết") != -1 || 
 						event.body.indexOf("weather") != -1) {
 						ReplyWeatherInfo(event.body, event.senderID);
 					return;
 					}
+					//Weather #### 
 
+					//Solve math (simple) ####
+					if(event.body.indexOf("math") == 0) {
+						var cont = (event.body.substring(5, event.body.length)).trim();
+						request(math+uriencode(cont), function(err,response,body) {
+								api.sendMessage(body, event.threadID);
+								return;
+							});
+						return;
+					}
+					//Solve math (simple) ####
+
+					//### JAV Code (random)
+					if(event.body.indexOf("jav") != -1 || event.body.indexOf("Jav") != -1) {
+						var ran = Math.floor((Math.random()*javCode.length));
+						api.sendMessage(javCode[ran], event.senderID);
+						return;
+					}
+					//JAV Code ####
+
+					//#### SMS 
+					if(event.body.indexOf("SMS") == 0) {
+						var cont = (event.body.substring(4,event.body.length)).trim();
+						var pPos = cont.search(/(?:\+)/g)
+						
+						var pKey = (cont.substring(pPos, cont.length)).trim();
+						var text = (cont.substring(0, cont.length-pKey.length)).trim();
+						func.log("SMS ["+text+"] to ["+pKey+"]",-1);
+						SMS(text, pKey);
+						return; 
+					}
+					//SMS ####
+
+					//####  Youtube search
 					if(event.body.indexOf("youtube") != -1 || event.body.indexOf("youtube search") != -1 || 
 						event.body.indexOf("video") != -1) {
 						YoutubeSearch(event.body, event.senderID);
 					return;
 					}
+					//Youtube search ####  
 
+					//#### Bad words filter
 					if(event.body.indexOf("ngu") != -1 || event.body.indexOf("cặc") != -1 ||
 						event.body.indexOf("lồn") != -1 || event.body.indexOf("địt mẹ") != -1) {
 						ReportAdmin("Có thằng vừa chửi em nè :(", event.senderID);
 						return;
 					}
+					//Bad words filter #### 
 
+					//#### ENCODE/DECODE (base64)
 					if(event.body.indexOf("encode:") == 0) {
 						var str = (event.body.substring(8, event.body.length)).trim();
 						var res = func.base64_encode(str);
@@ -251,6 +291,11 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 						api.sendMessage(res, event.senderID);
 						return;		
 					}
+					//ENCODE/DECODE (base64) #### 
+
+					///////////////////////// COMMAND EXECUTE ///////////////////////////
+
+
 					ReplyTextMessage(event.body, event.senderID);
 					break;
 				case 'event':
@@ -272,6 +317,8 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 						event.body = UndefinedHandle(event.body);
 					func.log(event.threadID+': '+event.body);
 
+					///////////////////////// COMMAND EXECUTE ///////////////////////////
+
 					if(event.body.indexOf("%pause%") == 0) {
 						func.log("Suspend at "+event.threadID+" by admin",-1);
 						Suspend[event.threadID] = true;
@@ -287,6 +334,15 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 					}
 					if(!Suspend.hasOwnProperty(event.threadID)) {
 
+					//#### Weather 
+					if(event.body.indexOf("thoi tiet") != -1 || event.body.indexOf("thời tiết") != -1 || 
+						event.body.indexOf("weather") != -1) {
+						ReplyWeatherInfo(event.body, event.threadID);
+					return;
+					}
+					//Weather ####
+
+					//#### SMS 
 					if(event.body.indexOf("SMS") == 0) {
 						var cont = (event.body.substring(4,event.body.length)).trim();
 						var pPos = cont.search(/(?:\+)/g)
@@ -297,12 +353,43 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 						SMS(text, pKey);
 						return; 
 					}
+					//SMS ####
 
+					//#### ENCODE/DECODE (base64)
+					if(event.body.indexOf("encode:") == 0) {
+						var str = (event.body.substring(8, event.body.length)).trim();
+						var res = func.base64_encode(str);
+						func.log('Base64_Encode ['+str+'] -> ['+res+']',0);
+						api.sendMessage(res, event.threadID);
+						return;
+					}
+
+					if(event.body.indexOf("decode:") == 0) {
+						var str = (event.body.substring(8, event.body.length)).trim();
+						var res = func.base64_decode(str);
+						func.log('Base64_Decode ['+str+'] -> ['+res+']',0);
+						api.sendMessage(res, event.threadID);
+						return;		
+					}
+					//ENCODE/DECODE (base64) ####
+
+					//####  Youtube search
+					if(event.body.indexOf("youtube") != -1 || event.body.indexOf("youtube search") != -1 || 
+						event.body.indexOf("video") != -1) {
+						YoutubeSearch(event.body, event.threadID);
+						return;
+					}
+					//Youtube Search ####
+
+					//### JAV Code (random)
 					if(event.body.indexOf("jav") != -1 || event.body.indexOf("Jav") != -1) {
 						var ran = Math.floor((Math.random()*javCode.length));
 						api.sendMessage(javCode[ran], event.threadID);
 						return;
 					}
+					//JAV Code ####
+
+					//#### Bad words filter
 					if(event.body.indexOf("bot") > -1 || event.body.indexOf("Bot") > -1 ||
 						event.body.indexOf("Zero") > -1 || event.body.indexOf("zero") > -1)
 						{
@@ -312,8 +399,9 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 								}						
 							return ReplyTextMessage(event.body, event.threadID);
 						} 
+					//Bad words filter ####
 
-
+					//Solve math (simple) ####
 					if(event.body.indexOf("math") == 0) {
 						var cont = (event.body.substring(5, event.body.length)).trim();
 						request(math+uriencode(cont), function(err,response,body) {
@@ -322,6 +410,9 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 							});
 						return;
 					}
+					//Solve math (simple) ####
+
+					///////////////////////// COMMAND EXECUTE ///////////////////////////
 					var cooldown = Math.floor((Math.random()*3));
 
 					if(cooldown == 1)
