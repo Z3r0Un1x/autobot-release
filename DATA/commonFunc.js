@@ -1,3 +1,4 @@
+//Fri Feb, 3 2017 6:40 PM
 'use strict'
 var fs = require('fs');
 var path = require('./const.js').path;
@@ -7,15 +8,15 @@ module.exports = {
 	//log function
 	log: function(data, option) {
 		if(option == 0)
-			return console.log('[✓SUCCESS]::'.green+data.white);
+			return console.log('[✓]::'.green+data.white);
 		if(option == 1)
-			return console.log('[!ERROR]::'.red+data.white);
+			return console.log('[!]::'.red+data.white);
 		if(option == -1)
-			return console.log('[⚠WARNING]::'.yellow+data.white);
+			return console.log('[⚠]::'.yellow+data.white);
 		if(option == 2)
-			return console.log('[☠CRITICAL]::'.blue+data.white);
+			return console.log('[☠]::'.blue+data.white);
 		if(option == null || option == undefined)
-			return console.log(('[SYSTEM] '+data).white);
+			return console.log(('[LOGGER] '+data).white);
 	},
 
 	//encode/decode functions
