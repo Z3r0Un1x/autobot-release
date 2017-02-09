@@ -27,6 +27,7 @@ var i,j;
 var SpamCount = {};
 var SpamID = {};
 
+func.log('/********* COPYRIGHT (C) ZEROUNIX. WORK UNDER MIT LICENSE!! *********/');
 
 
 var javCode = Array('MIAD-530', 'MIDD-944', 'LADY-077', 'SW-186', 'STAR444', 'T28-184', 'dvdes-635','BOD-277','BOD-277', 'ARMG-014', 'JUC-579','BBI-142', 'MILD-716', 'FSLV-002', 'CRS-S014',
@@ -111,10 +112,10 @@ login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function
 				if(body.indexOf("không hiểu ý bạn") != -1)
 					return api.sendMessage(":) ?");
 				mess = retrieve.messages[0].text;
-				if(mess.indexOf("kuteteen.tv") > -1 ||  mess.indexOf("Kuteteen") > -1 || 
-					mess.indexOf("kuteteen") > -1) {
-					func.log("Advertisment link detected! ",-1);
-					mess = mess.replace(mess,"<3");
+				if(mess.indexOf(".tv") > -1 ||  mess.indexOf(".TV") > -1
+					|| mess.indexOf(".TK") >-1 || mess.indexOf(".tk") >-1 || mess.indexOf(".cf") >-1 || mess.indexOf(".CF") > -1) {
+					func.log("Advertisment link detected! "+mess,-1);
+					mess = mess.replace(mess,"ơi <3");
 				}
 				api.sendMessage(mess,id)
 				func.log('Replied: '+mess);
