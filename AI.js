@@ -69,7 +69,7 @@ var javCode = Array('MIAD-530', 'MIDD-944', 'LADY-077', 'SW-186', 'STAR444', 'T2
 'STAR-553','KRND-020','RHTS-015', 'RHTS-040','RTP-020');
 
 
-login({email: 'default_crt@yahoo.com', password: 'fournightatfreddy1'}, function callback(err, api) {
+login({email: '_', password: '_'}, function callback(err, api) {
 	if(err)
 		return err.error;
 	func.log('Logged as https://fb.com/'+api.getCurrentUserID(),0);
